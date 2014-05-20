@@ -23,18 +23,61 @@ L.append("01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48")
 GRID = [i.split() for i in L]
 GRID = [[int(j) for j in i] for i in GRID]
 
-def product(li):
-    p = 1
-    for i in li:
-        p *= i
-    return p
+def compute_max_adjacent_product(grid, x): #Computes maximum product of x consecutive numbers in a n x n grid of positive integers
 
-def compute_max_adjacent_product(grid, row, col, n):
-    products = []
-    left_valid = col >= (n-1)
-    right_valid = col <= len(GRID[0])
-    if (left_valid):
-        products += product(GRID[row][(col-n+1):(col+1)])
+    max_product = max(compute_max_horiztonal_product(grid,x), compute_max_vertical_product(grid,x),compute_max_main_diagonal_product(grid, x),compute_max_minor_diagonal_product(grid, x))
+    return max_product
 
-print(GRID)
-    
+def compute_max_main_diagonal_product(grid, x):
+    max_product = 0
+    size = len(grid)
+    for i in range(size-x+1):
+        for j in range(size-x+1):
+            product = 1
+            for k in range(x):
+                product *= grid[i+k][j+k]
+            if (product > max_product):
+                max_product = product
+    return max_product
+
+def compute_max_minor_diagonal_product(grid, x):
+    max_product = 0
+    size = len(grid)
+    for i in (range(x-1,size)):
+        for j in range(size-x+1):
+            product = 1
+            for k in range(x):
+                product *= grid[i-k][j+k]
+            if (product > max_product):
+                max_product = product
+    return max_product
+
+def compute_max_vertical_product(grid, x):
+    max_product = 0
+    size = len(grid)
+    for i in range(size-x+1):
+        for j in range(size):
+            product = 1
+            for k in range(x):
+                product *= grid[i+k][j]
+            if (product > max_product):
+                max_product = product
+    return max_product
+
+def compute_max_horiztonal_product(grid, x):
+    max_product = 0
+    size = len(grid)
+    for i in range(size):
+        for j in range(size-x+1):
+            product = 1
+            for k in range(x):
+                product *= grid[i][j+k]
+            if (product > max_product):
+                max_product = product
+    return max_product
+
+def solve_problem():
+    solution = compute_max_adjacent_product(GRID, 4)
+    print(solution)
+
+solve_problem()
